@@ -1,4 +1,4 @@
-# ana
+# ana-chain
 
 ## Getting Started
 

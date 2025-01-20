@@ -5,48 +5,48 @@ use anchor_lang::prelude::*;
 declare_id!("coUnmi3oBUtwtd9fjeAvSsJssXh5A5xyPbhpewyzRVF");
 
 #[program]
-pub mod ana {
+pub mod anachain {
     use super::*;
 
-  pub fn close(_ctx: Context<CloseAna>) -> Result<()> {
+  pub fn close(_ctx: Context<CloseAnachain>) -> Result<()> {
     Ok(())
   }
 
   pub fn decrement(ctx: Context<Update>) -> Result<()> {
-    ctx.accounts.ana.count = ctx.accounts.ana.count.checked_sub(1).unwrap();
+    ctx.accounts.anachain.count = ctx.accounts.anachain.count.checked_sub(1).unwrap();
     Ok(())
   }
 
   pub fn increment(ctx: Context<Update>) -> Result<()> {
-    ctx.accounts.ana.count = ctx.accounts.ana.count.checked_add(1).unwrap();
+    ctx.accounts.anachain.count = ctx.accounts.anachain.count.checked_add(1).unwrap();
     Ok(())
   }
 
-  pub fn initialize(_ctx: Context<InitializeAna>) -> Result<()> {
+  pub fn initialize(_ctx: Context<InitializeAnachain>) -> Result<()> {
     Ok(())
   }
 
   pub fn set(ctx: Context<Update>, value: u8) -> Result<()> {
-    ctx.accounts.ana.count = value.clone();
+    ctx.accounts.anachain.count = value.clone();
     Ok(())
   }
 }
 
 #[derive(Accounts)]
-pub struct InitializeAna<'info> {
+pub struct InitializeAnachain<'info> {
   #[account(mut)]
   pub payer: Signer<'info>,
 
   #[account(
   init,
-  space = 8 + Ana::INIT_SPACE,
+  space = 8 + Anachain::INIT_SPACE,
   payer = payer
   )]
-  pub ana: Account<'info, Ana>,
+  pub anachain: Account<'info, Anachain>,
   pub system_program: Program<'info, System>,
 }
 #[derive(Accounts)]
-pub struct CloseAna<'info> {
+pub struct CloseAnachain<'info> {
   #[account(mut)]
   pub payer: Signer<'info>,
 
@@ -54,17 +54,17 @@ pub struct CloseAna<'info> {
   mut,
   close = payer, // close account and return lamports to payer
   )]
-  pub ana: Account<'info, Ana>,
+  pub anachain: Account<'info, Anachain>,
 }
 
 #[derive(Accounts)]
 pub struct Update<'info> {
   #[account(mut)]
-  pub ana: Account<'info, Ana>,
+  pub anachain: Account<'info, Anachain>,
 }
 
 #[account]
 #[derive(InitSpace)]
-pub struct Ana {
+pub struct Anachain {
   count: u8,
 }

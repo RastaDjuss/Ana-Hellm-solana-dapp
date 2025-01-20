@@ -1,6 +1,6 @@
 'use client'
 
-import { getAnaProgram, getAnaProgramId } from '@project/anchor'
+import { getAnachainProgram, getAnachainProgramId } from '@project/anchor'
 import { useConnection } from '@solana/wallet-adapter-react'
 import { Cluster, Keypair, PublicKey } from '@solana/web3.js'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -10,17 +10,17 @@ import { useCluster } from '../cluster/cluster-data-access'
 import { useAnchorProvider } from '../solana/solana-provider'
 import { useTransactionToast } from '../ui/ui-layout'
 
-export function useAnaProgram() {
+export function useAnachainProgram() {
   const { connection } = useConnection()
   const { cluster } = useCluster()
   const transactionToast = useTransactionToast()
   const provider = useAnchorProvider()
-  const programId = useMemo(() => getAnaProgramId(cluster.network as Cluster), [cluster])
-  const program = useMemo(() => getAnaProgram(provider, programId), [provider, programId])
+  const programId = useMemo(() => getAnachainProgramId(cluster.network as Cluster), [cluster])
+  const program = useMemo(() => getAnachainProgram(provider, programId), [provider, programId])
 
   const accounts = useQuery({
-    queryKey: ['ana', 'all', { cluster }],
-    queryFn: () => program.account.ana.all(),
+    queryKey: ['anachain', 'all', { cluster }],
+    queryFn: () => program.account.anachain.all(),
   })
 
   const getProgramAccount = useQuery({
@@ -29,9 +29,9 @@ export function useAnaProgram() {
   })
 
   const initialize = useMutation({
-    mutationKey: ['ana', 'initialize', { cluster }],
+    mutationKey: ['anachain', 'initialize', { cluster }],
     mutationFn: (keypair: Keypair) =>
-      program.methods.initialize().accounts({ ana: keypair.publicKey }).signers([keypair]).rpc(),
+      program.methods.initialize().accounts({ anachain: keypair.publicKey }).signers([keypair]).rpc(),
     onSuccess: (signature) => {
       transactionToast(signature)
       return accounts.refetch()
@@ -48,19 +48,19 @@ export function useAnaProgram() {
   }
 }
 
-export function useAnaProgramAccount({ account }: { account: PublicKey }) {
+export function useAnachainProgramAccount({ account }: { account: PublicKey }) {
   const { cluster } = useCluster()
   const transactionToast = useTransactionToast()
-  const { program, accounts } = useAnaProgram()
+  const { program, accounts } = useAnachainProgram()
 
   const accountQuery = useQuery({
-    queryKey: ['ana', 'fetch', { cluster, account }],
-    queryFn: () => program.account.ana.fetch(account),
+    queryKey: ['anachain', 'fetch', { cluster, account }],
+    queryFn: () => program.account.anachain.fetch(account),
   })
 
   const closeMutation = useMutation({
-    mutationKey: ['ana', 'close', { cluster, account }],
-    mutationFn: () => program.methods.close().accounts({ ana: account }).rpc(),
+    mutationKey: ['anachain', 'close', { cluster, account }],
+    mutationFn: () => program.methods.close().accounts({ anachain: account }).rpc(),
     onSuccess: (tx) => {
       transactionToast(tx)
       return accounts.refetch()
@@ -68,8 +68,8 @@ export function useAnaProgramAccount({ account }: { account: PublicKey }) {
   })
 
   const decrementMutation = useMutation({
-    mutationKey: ['ana', 'decrement', { cluster, account }],
-    mutationFn: () => program.methods.decrement().accounts({ ana: account }).rpc(),
+    mutationKey: ['anachain', 'decrement', { cluster, account }],
+    mutationFn: () => program.methods.decrement().accounts({ anachain: account }).rpc(),
     onSuccess: (tx) => {
       transactionToast(tx)
       return accountQuery.refetch()
@@ -77,8 +77,8 @@ export function useAnaProgramAccount({ account }: { account: PublicKey }) {
   })
 
   const incrementMutation = useMutation({
-    mutationKey: ['ana', 'increment', { cluster, account }],
-    mutationFn: () => program.methods.increment().accounts({ ana: account }).rpc(),
+    mutationKey: ['anachain', 'increment', { cluster, account }],
+    mutationFn: () => program.methods.increment().accounts({ anachain: account }).rpc(),
     onSuccess: (tx) => {
       transactionToast(tx)
       return accountQuery.refetch()
@@ -86,8 +86,8 @@ export function useAnaProgramAccount({ account }: { account: PublicKey }) {
   })
 
   const setMutation = useMutation({
-    mutationKey: ['ana', 'set', { cluster, account }],
-    mutationFn: (value: number) => program.methods.set(value).accounts({ ana: account }).rpc(),
+    mutationKey: ['anachain', 'set', { cluster, account }],
+    mutationFn: (value: number) => program.methods.set(value).accounts({ anachain: account }).rpc(),
     onSuccess: (tx) => {
       transactionToast(tx)
       return accountQuery.refetch()

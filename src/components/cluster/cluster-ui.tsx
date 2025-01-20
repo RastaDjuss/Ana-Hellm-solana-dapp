@@ -100,14 +100,14 @@ export function ClusterUiModal({ hideModal, show }: { hideModal: () => void; sho
     >
       <input
         type="text"
-        ana="Name"
+        anachain="Name"
         className="input input-bordered w-full"
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
       <input
         type="text"
-        ana="Endpoint"
+        anachain="Endpoint"
         className="input input-bordered w-full"
         value={endpoint}
         onChange={(e) => setEndpoint(e.target.value)}

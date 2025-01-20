@@ -4,10 +4,10 @@ import { Keypair, PublicKey } from '@solana/web3.js'
 import { useMemo } from 'react'
 import { ellipsify } from '../ui/ui-layout'
 import { ExplorerLink } from '../cluster/cluster-ui'
-import { useAnaProgram, useAnaProgramAccount } from './ana-data-access'
+import { useAnachainProgram, useAnachainProgramAccount } from './anachain-data-access'
 
-export function AnaCreate() {
-  const { initialize } = useAnaProgram()
+export function AnachainCreate() {
+  const { initialize } = useAnachainProgram()
 
   return (
     <button
@@ -20,8 +20,8 @@ export function AnaCreate() {
   )
 }
 
-export function AnaList() {
-  const { accounts, getProgramAccount } = useAnaProgram()
+export function AnachainList() {
+  const { accounts, getProgramAccount } = useAnachainProgram()
 
   if (getProgramAccount.isLoading) {
     return <span className="loading loading-spinner loading-lg"></span>
@@ -40,7 +40,7 @@ export function AnaList() {
       ) : accounts.data?.length ? (
         <div className="grid md:grid-cols-2 gap-4">
           {accounts.data?.map((account) => (
-            <AnaCard key={account.publicKey.toString()} account={account.publicKey} />
+            <AnachainCard key={account.publicKey.toString()} account={account.publicKey} />
           ))}
         </div>
       ) : (
@@ -53,8 +53,8 @@ export function AnaList() {
   )
 }
 
-function AnaCard({ account }: { account: PublicKey }) {
-  const { accountQuery, incrementMutation, setMutation, decrementMutation, closeMutation } = useAnaProgramAccount({
+function AnachainCard({ account }: { account: PublicKey }) {
+  const { accountQuery, incrementMutation, setMutation, decrementMutation, closeMutation } = useAnachainProgramAccount({
     account,
   })
 
